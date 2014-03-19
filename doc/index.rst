@@ -20,6 +20,7 @@ Python Packages
 * `numpy`
 * `scipy`
 * `biopython`
+* `pandas`
 
 forgi
 .....
