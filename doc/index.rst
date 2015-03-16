@@ -85,18 +85,8 @@ Check the first fasta sequence to make sure it is properly generated with an id 
     GAACUAAGUGAUCUAGAAAGGUAUGUCUAAAGUUAUGGCCACGUUUCAAAUGCGUGCUUUUUUUUUAAAACUUAUG
     ....(((((.....((((((((((((.....(..(((....)))..)....))))))))))))......)))))..
 
-If everything is in order, these files can be used as input to ernwin to calculate 3D distances between the nucleotides which contain the flourophores. The numbers of the nucleotides with contain the flourophores are passed as the options `--dist1` and `--dist2`. In the example below, they are 14 and 76::
+From here, we just need to run the simulation::
 
-    find experiments/21.02.14/fastas_orig_seq -name "*.fa" | xargs -I {} gibbs.py --cylinder-loop-rog -m -i 100 --output-dir jing/ --single-sampler --dist1 14 --dist2 76 --log-to-file {}
+    python scripts/run_ernwin.sh
 
-The imporant options in the command above are:
-
-* `-i` The number of sampling steps in the 3D structure generation procedure
-* `--output-dir` The directory in which the output will be stored. This directory will contain the models for the best 3 structures as well as a log of the output for the program. This log file will contain the distances between the specified nucleotides as the last column. If no two nucleotides are specified, no distances will be printed.
-
-
-The results can be condensed into a single file using an awk command::
-
-    find jing/ -name "log.txt" | xargs cat | awk '{print ( $NF ) }' | histogram.py
-
-
+The results will then be available in `ernwin-info/all_distances.csv`.

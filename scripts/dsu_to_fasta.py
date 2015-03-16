@@ -2,7 +2,6 @@
 
 import re
 import sys
-import forgi.utilities.debug as fud
 import os
 import os.path as op
 from optparse import OptionParser
@@ -39,11 +38,11 @@ def main():
         for line in lines:
             if len(line.strip()) == 0:
                 continue
-            parts = line.strip().split()
-            id_str = str(counter)
 
-            m = re.search('([\.\(\)]+)', line)
-            ss_str = m.group(1)
+            print >>sys.stderr, line
+            m = re.search('([\d]+)\t([\.\(\)]+)', line)
+            ss_str = m.group(2)
+            id_str = m.group(1)
 
             out_str = ">%s\n%s\n%s\n" % (id_str, seq, ss_str)
 
