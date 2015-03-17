@@ -1,5 +1,6 @@
 #!/usr/bin/python
 
+import glob
 import os
 import os.path as op
 import subprocess as sp
@@ -10,13 +11,13 @@ from optparse import OptionParser
 
 def main():
     usage = """
-    python jing_pipeline dsu_file
+    python jing_pipeline dsu_file dist1 dist2
 
     The results will all be placed in the directory where
     dsu_file exists. The fastas will be placed in fastas_dsu_file.
     The structures will be placed in structures_dsu_file.
     """
-    num_args= 1
+    num_args= 3
     parser = OptionParser(usage=usage)
 
     #parser.add_option('-o', '--options', dest='some_option', default='yo', help="Place holder for a real option", type='str')
@@ -29,24 +30,45 @@ def main():
         parser.print_help()
         sys.exit(1)
 
+    try:
+        dist1 = int(args[1])
+        dist2 = int(args[2])
+    except ValueError as ve:
+        print >>sys.stderr, "The nucleotides between which to calculate the distances need to be entered as numbers"
+        return
+
     # Create the fasta files
     directory, filename = op.split(args[0])
     filebase, extension = op.splitext(filename)
     output_directory = op.join(directory, "fastas_" + filebase)
+    ernwin_output_directory = op.join(directory, 'ernwin-output')
 
     if not op.exists(output_directory):
         os.makedirs(output_directory)
 
+    # create the fasta files
     fud.pv('"*" + output_directory + "*"')
-    p = sp.Popen(['python',
-                  'scripts/dsu_to_fasta.py',
+    p = sp.Popen(['dsu_to_fasta.py',
                   '-o', output_directory,
                   '-n', str(options.first_n),
                   args[0]])
     out, err = p.communicate()
 
-    print "directory:", directory, "filebase:", filebase
+    fastas_list = glob.glob(op.join(output_directory, "*.fa"))
+    print >>sys.stderr, "fastas_list:", fastas_list
 
+    print "directory:", directory, "filebase:", filebase
+    # run ernwin in parallel
+    command = ['parallel',
+                  '-j', '4',
+                  'ernwin_go.py',
+                  '--dist1', str(dist1),
+                  '--dist2', str(dist2),
+                  '--output-dir', ernwin_output_directory,
+                  '--log-to-file', ":::"]  + fastas_list
+    print "command:", command
+    p = sp.Popen(command)
+    out, err = p.communicate()
 
 if __name__ == '__main__':
     main()
