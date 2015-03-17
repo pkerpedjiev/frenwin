@@ -29,7 +29,6 @@ forgi is required by the 3D model creation software `ernwin`. It needs to be dow
 
     git clone https://github.com/pkerpedjiev/forgi.git
     cd forgi
-    git checkout nocytvec
     python setup.py install
 
 
@@ -41,7 +40,6 @@ the repository, replace `pkerp` with your tbi username::
 
     git clone pkerp@pendari.tbi.univie.ac.at:~/repos/ernwin.git
     cd ernwin
-    git checkout full-assed-merge
     python setup.py install
 
 frenwin
