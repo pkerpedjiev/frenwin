@@ -42,7 +42,7 @@ def main():
     # Create the fasta files
     directory, filename = op.split(args[0])
     filebase, extension = op.splitext(filename)
-    output_directory = op.join(directory, "fastas_" + filebase)
+    output_directory = op.join(directory, "fastas")
     ernwin_output_directory = op.join(directory, 'ernwin-output')
 
     if not op.exists(output_directory):

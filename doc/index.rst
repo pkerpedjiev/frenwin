@@ -84,6 +84,10 @@ using the `-n` option::
 
    frenwin.py ${EXPERIMENT_DIR}/orig_seq.subopt -n 10 14 76
 
+Run ernwin::
+
+    find fastas/ -name *.fa | xargs -n 1 qsub -cwd -o cluster_output -e cluster_error -l h_vmem=8G -b y -q c_main.q ernwin_go.py --dist1 14 --dist2 76 --stats-file ~/projects/ernwin/fess/stats/combined.stats --output-dir ernwin-output/ --log-to-file
+
 Finally, we need to collect the results::
 
     find ${EXPERIMENT_DIR}/ernwin-output -name "log.txt" | xargs cat | awk '{sub(/\[/,"",$2); print $2, $21}' > ${EXPERIMENT_DIR}/all_distances.csv 
