@@ -62,11 +62,11 @@ Sample Input File
 
 ::
 
-    GAACUAAGUGAUCUAGAAAGGUAUGUCUAAAGUUAUGGCCACGUUUCAAAUGCGUGCUUUUUUUUUAAAACUUAUG
-    1   ....(((((.....(((((((((((......(..(((....)))..).....)))))))))))......)))))..    461
-    2   ....(((((.....((((((((((((.....(..(((....)))..)....))))))))))))......)))))..    12619
-    3   ....(((((.....((((((((((((........(((....))).......))))))))))))......)))))..    7781
-    4   .....((((.....((((((((((((........(((....))).......))))))))))))......))))...    1077
+    GAACUAAGUGAUCUAGAAAGGUAUGUCUAAAGUUAUGGCCACGUUUCAAAUGCGUGCUUUUUUUUUAAAACUUAUGCUCUUAUUUACUAACAAAAUCAACAUGCUAUUGAACUAGAGAUCCACCUACUUCAUGUU
+    2       ....(((((.....((((((((((((.....(..(((....)))..)....))))))))))))......)))))............................((...((((.(((........))).)))).)). -17.2   NORM_CF NA      NA
+    3       ((.((((((.....((((((((((((.....(..(((....)))..)....))))))))))))......))))).).))............................((((.(((........))).)))).... -16.8   NORM_CF NA      NA
+    5       ....(((((.....((((((((((((.....(..(((....)))..)....))))))))))))......))))).................................((((.(((........))).)))).... -16.7   NORM_CF NA      NA
+
 
 
 This file will be converted into a set of fasta files which will subsequently
@@ -84,9 +84,13 @@ using the `-n` option::
 
    frenwin.py ${EXPERIMENT_DIR}/orig_seq.subopt -n 10 14 76
 
-Run ernwin::
+Run ernwin (this will produce 10000 samples, as controlled by the -i option).::
 
-    find fastas/ -name *.fa | xargs -n 1 qsub -cwd -o cluster_output -e cluster_error -l h_vmem=8G -b y -q c_main.q ernwin_go.py --dist1 14 --dist2 76 --stats-file ~/projects/ernwin/fess/stats/combined.stats --output-dir ernwin-output/ --log-to-file
+    find ${EXPERIMENT_DIR}/fastas/ -name *.fa | xargs -n 1 qsub -V -cwd -o cluster_output -e cluster_error -l h_vmem=8G -b y -q c_main.q ernwin_go.py --dist1 14 --dist2 76 --output-dir ${EXPERIMENT_DIR}/ernwin-output/ --log-to-file -i 10000
+
+Run locally (not on the cluster)::
+
+    find ${EXPERIMENT_DIR}/fastas/ -name *.fa | xargs -n 1 ernwin_go.py --dist1 14 --dist2 76 --output-dir ${EXPERIMENT_DIR}/ernwin-output/ --log-to-file -i 10000
 
 Finally, we need to collect the results::
 
