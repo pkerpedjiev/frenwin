@@ -40,7 +40,8 @@ def main():
                 continue
 
             print >>sys.stderr, line
-            m = re.search('([\d]+)\t([\.\(\)\[\]]+)', line)
+            m = re.search(r'[ \t]*?([\d]+)[ \t]*?([\(\)\.\[\]]+)', line)
+            print >>sys.stderr, "m:", m
             ss_str = m.group(2)
             id_str = m.group(1)
 

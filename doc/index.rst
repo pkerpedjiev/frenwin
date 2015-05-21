@@ -94,6 +94,22 @@ Run locally (not on the cluster)::
 
 Finally, we need to collect the results::
 
-    find ${EXPERIMENT_DIR}/ernwin-output -name "log.txt" | xargs cat | awk '{sub(/\[/,"",$2); print $2, $21}' > ${EXPERIMENT_DIR}/all_distances.csv 
+    find ${EXPERIMENT_DIR}/ernwin-output/ -name "log.txt" | xargs cat  | python scripts/grep_dists2.py - > ${EXPERIMENT_DIR}/ernwin_distances.csv
 
 The final list of distances can then be found in ${EXPERIMENT_DIR}/all_distances.csv
+
+Rosetta Runs
+------------
+
+Prepare the list of secondary structures for 3D modelling using Rosetta::
+
+    find ${EXPERIMENT_DIR}/fastas/ -name "*.fa" -print | xargs -n 1 python scripts/prepare_from_ss_no_assembly.py -b ${EXPERIMENT_DIR}/rosetta_tests/ -n 1000
+
+Run the Rosetta modelling::
+
+     find ${EXPERIMENT_DIR}/rosetta_tests -name "run.sh" | xargs -n 1 qsub -V -cwd -o cluster_output -e cluster_error -l h_vmem=8G -b y -q c_main.q 
+
+Extract the distances from the generated structures::
+
+    rm ${EXPERIMENTS_DIR}/rosetta_output.csv; for file in $(ls ${EXPERIMENTS_DIR}/rosetta_tests/*/pdbs/*.pdb); do echo $file; python scripts/get_rosetta_distances.py -d 13,36 $file >> ${EXPERIMENTS_DIR}/rosetta_output.csv; done;
+
