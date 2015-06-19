@@ -86,11 +86,11 @@ using the `-n` option::
 
 Run ernwin (this will produce 10000 samples, as controlled by the -i option).::
 
-    find ${EXPERIMENT_DIR}/fastas/ -name *.fa | xargs -n 1 qsub -V -cwd -o cluster_output -e cluster_error -l h_vmem=8G -b y -q c_main.q ernwin_go.py --dist1 14 --dist2 76 --output-dir ${EXPERIMENT_DIR}/ernwin-output/ --log-to-file -i 10000
+    find ${EXPERIMENT_DIR}/fastas/ -name *.fa | xargs -n 1 qsub -V -cwd -o cluster_output -e cluster_error -l h_vmem=8G -b y -q c_main.q ernwin_go.py --dists 14,96:14,119 --output-dir ${EXPERIMENT_DIR}/ernwin-output/ --log-to-file -i 10000
 
 Run locally (not on the cluster)::
 
-    find ${EXPERIMENT_DIR}/fastas/ -name *.fa | xargs -n 1 ernwin_go.py --dist1 14 --dist2 76 --output-dir ${EXPERIMENT_DIR}/ernwin-output/ --log-to-file -i 10000
+    find ${EXPERIMENT_DIR}/fastas/ -name *.fa | xargs -n 1 ernwin_go.py --dists:14,96:14,119 --output-dir ${EXPERIMENT_DIR}/ernwin-output/ --log-to-file -i 10000
 
 Finally, we need to collect the results::
 
@@ -111,5 +111,5 @@ Run the Rosetta modelling::
 
 Extract the distances from the generated structures::
 
-    rm ${EXPERIMENTS_DIR}/rosetta_output.csv; for file in $(ls ${EXPERIMENTS_DIR}/rosetta_tests/*/pdbs/*.pdb); do echo $file; python scripts/get_rosetta_distances.py -d 13,36 $file >> ${EXPERIMENTS_DIR}/rosetta_output.csv; done;
+    rm ${EXPERIMENT_DIR}/rosetta_output.csv; for file in $(ls ${EXPERIMENT_DIR}/rosetta_tests/*/pdbs/*.pdb); do echo $file; python scripts/get_rosetta_distances.py -d 13,36 $file >> ${EXPERIMENT_DIR}/rosetta_output.csv; done;
 
