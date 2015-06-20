@@ -27,7 +27,8 @@ def main():
     else:
         f = open(args[0], 'r')
 
-    prog = re.compile("native_energy \[([\d]+) [\d]+\].*?dist2: (.*?) ")
+    prog = re.compile("native_energy \[([\d]+) [\d]+\]*.*")
+    dist_re = re.compile('dist2: (.*?)\]') 
 
     for line in f:
         m = prog.match(line)
@@ -35,8 +36,14 @@ def main():
         if m is None:
             continue
 
-        print m.group(1), m.group(2).strip('[]')
+        sequence_number = m.group(1)
+        distances = []
 
+        for m in dist_re.finditer(line):
+            if len(m.groups()) == 1:
+                distances += [m.group(1)]
+
+        print sequence_number, ' '.join(distances)
 
 if __name__ == '__main__':
     main()
