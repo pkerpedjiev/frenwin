@@ -77,12 +77,12 @@ to `frenwin.py` indicate the nucleotides between which we wish to simulate the
 distances.::
 
     EXPERIMENT_DIR=experiments/21.02.14
-    frenwin.py ${EXPERIMENT_DIR}/orig_seq.subopt 14 76
+    frenwin.py ${EXPERIMENT_DIR}/orig_seq.subopt
 
 One can indicate that only the first *n* secondary structures should be used by
 using the `-n` option::
 
-   frenwin.py ${EXPERIMENT_DIR}/orig_seq.subopt -n 10 14 76
+   frenwin.py ${EXPERIMENT_DIR}/orig_seq.subopt -n 10
 
 Run ernwin (this will produce 10000 samples, as controlled by the -i option).::
 

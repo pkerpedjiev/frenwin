@@ -17,7 +17,7 @@ def main():
     dsu_file exists. The fastas will be placed in fastas_dsu_file.
     The structures will be placed in structures_dsu_file.
     """
-    num_args= 3
+    num_args= 1
     parser = OptionParser(usage=usage)
 
     #parser.add_option('-o', '--options', dest='some_option', default='yo', help="Place holder for a real option", type='str')
@@ -32,12 +32,6 @@ def main():
         parser.print_help()
         sys.exit(1)
 
-    try:
-        dist1 = int(args[1])
-        dist2 = int(args[2])
-    except ValueError as ve:
-        print >>sys.stderr, "The nucleotides between which to calculate the distances need to be entered as numbers"
-        return
 
     # Create the fasta files
     directory, filename = op.split(args[0])
@@ -59,6 +53,14 @@ def main():
 
     fastas_list = glob.glob(op.join(output_directory, "*.fa"))
 
+    '''
+    try:
+        dist1 = int(args[1])
+        dist2 = int(args[2])
+    except ValueError as ve:
+        print >>sys.stderr, "The nucleotides between which to calculate the distances need to be entered as numbers"
+        return
+
     scons_text = """
 import glob
 import os
@@ -77,7 +79,6 @@ for fasta in fastas_list:
     with open(op.join(op.dirname(args[0]), 'SConstruct'), 'w') as f:
         f.write(scons_text)
 
-    '''
     print >>sys.stderr, "fastas_list:", fastas_list
 
     print "directory:", directory, "filebase:", filebase
